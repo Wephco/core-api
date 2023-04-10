@@ -134,3 +134,12 @@ class Consultation(Base):
     message = Column(String, nullable=False)
     contactMethod = Column(String, nullable=False)
     createdAt = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+
+
+class Payments(Base):
+    __tablename__ = "payments"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    serviceId = Column(Integer, nullable=False)
+    userId = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    amount = Column(Integer, nullable=False)
