@@ -1,10 +1,10 @@
 from fastapi import status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
-from db.database import get_db
-from db.database_models import User
+from ..db import database
+from ..db import database_models
 from ..schemas.user_models import CreateUser, CreateUserResponse
-from auth.hash import hash_password
-from auth.oauth import get_current_user
+from ..auth import hash
+from ..auth import oauth
 
 router = APIRouter(
     prefix="/user",
@@ -12,12 +12,12 @@ router = APIRouter(
 )
 
 @router.post("/new", status_code=status.HTTP_201_CREATED, response_model=CreateUserResponse)
-def create_user(user: CreateUser, db: Session = Depends(get_db)):
+def create_user(user: CreateUser, db: Session = Depends(database.get_db)):
     # hash user password and replace plain text password with hashed password
-    hashed_password = hash_password(user.password)
+    hashed_password = hash.hash_password(user.password)
     user.password = hashed_password
 
-    new_user = User(**user.dict())
+    new_user = database_models.User(**user.dict())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -26,8 +26,8 @@ def create_user(user: CreateUser, db: Session = Depends(get_db)):
 
 
 @router.get("/{id}", response_model=CreateUserResponse)
-def get_user(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    user = db.query(User).filter(User.id == current_user.id).first()
+def get_user(id: int, db: Session = Depends(database.get_db), current_user: database_models.User = Depends(oauth.get_current_user)):
+    user = db.query(database_models.User).filter(database_models.User.id == current_user.id).first()
 
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not Found")
