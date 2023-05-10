@@ -3,18 +3,24 @@ from typing import Optional
 from datetime import datetime
 from .api_response import ApiResponse
 
+
 class UserBase(BaseModel):
     name: str
     email: EmailStr
     phoneNumber: str
 
+    class Config:
+        orm_mode = True
+
 
 class CreateUser(UserBase):
     password: str
+    role: Optional[str] = 'customer'
 
 
 class CreateUserResponse(UserBase):
     id: int
+    role: str
     createdAt: datetime
 
     class Config:
@@ -35,4 +41,3 @@ class LoginUserResponse(UserBase):
 
 class TokenData(BaseModel):
     id: Optional[str] = None
-

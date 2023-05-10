@@ -5,13 +5,31 @@ from ..db import database_models
 from ..schemas.user_models import CreateUser, CreateUserResponse
 from ..auth import hash
 from ..auth import oauth
+from ..utils.enums import Roles
 
 router = APIRouter(
     prefix="/user",
     tags=['User']
 )
 
-@router.post("/new", status_code=status.HTTP_201_CREATED, response_model=CreateUserResponse)
+
+def create_user_without_password(user: CreateUser, db: Session = Depends(database.get_db)):
+    db_user = db.query(database_models.User).filter(
+        database_models.User.email == user.email).first()
+
+    if db_user:
+        return db_user
+    else:
+        hashed_password = hash.hash_password(user.phoneNumber)
+        user.password = hashed_password
+        new_user = database_models.User(**user.dict())
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        return new_user
+
+
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=CreateUserResponse)
 def create_user(user: CreateUser, db: Session = Depends(database.get_db)):
     # hash user password and replace plain text password with hashed password
     hashed_password = hash.hash_password(user.password)
@@ -27,9 +45,15 @@ def create_user(user: CreateUser, db: Session = Depends(database.get_db)):
 
 @router.get("/{id}", response_model=CreateUserResponse)
 def get_user(id: int, db: Session = Depends(database.get_db), current_user: database_models.User = Depends(oauth.get_current_user)):
-    user = db.query(database_models.User).filter(database_models.User.id == current_user.id).first()
+    user = db.query(database_models.User).filter(
+        database_models.User.id == id).first()
 
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not Found")
-    
-    return user
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not Found")
+
+    if current_user.role == Roles.admin:
+        return user
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail='Operation not allowed')

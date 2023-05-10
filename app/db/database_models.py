@@ -3,6 +3,8 @@ from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.orm import relationship
 from .database import Base
+from ..utils.enums import Roles
+
 
 class User(Base):
     __tablename__ = "users"
@@ -12,7 +14,9 @@ class User(Base):
     email = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
     phoneNumber = Column(String, nullable=False)
-    createdAt = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    role = Column(String, default=Roles.customer)
+    createdAt = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=text('now()'))
 
 
 class PropertyRequest(Base):
@@ -26,9 +30,10 @@ class PropertyRequest(Base):
     maxBudget = Column(String, nullable=False)
     notes = Column(String)
     isPaid = Column(Boolean, nullable=False)
-    userId = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    createdAt = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
-
+    createdAt = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=text('now()'))
+    userId = Column(Integer, ForeignKey(
+        "users.id", ondelete="CASCADE"), nullable=False)
     user = relationship("User")
 
 
@@ -45,7 +50,11 @@ class HotelRequest(Base):
     numberOfRooms = Column(Integer, nullable=False)
     budgetPerRoom = Column(Integer, nullable=False)
     isPaid = Column(Boolean, nullable=False)
-    createdAt = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    userId = Column(Integer, ForeignKey(
+        "users.id", ondelete="CASCADE"), nullable=False)
+    user = relationship("User")
+    createdAt = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=text('now()'))
 
 
 class MeetingRoomRequest(Base):
@@ -62,7 +71,11 @@ class MeetingRoomRequest(Base):
     budgetPerDay = Column(Integer, nullable=False)
     numberOfDays = Column(Integer, nullable=False)
     isPaid = Column(Boolean, nullable=False)
-    createdAt = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    userId = Column(Integer, ForeignKey(
+        "users.id", ondelete="CASCADE"), nullable=False)
+    user = relationship("User")
+    createdAt = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=text('now()'))
 
 
 class EventHallRequest(Base):
@@ -76,7 +89,11 @@ class EventHallRequest(Base):
     budgetPerDay = Column(Integer, nullable=False)
     numberOfDays = Column(Integer, nullable=False)
     isPaid = Column(Boolean, nullable=False)
-    createdAt = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    userId = Column(Integer, ForeignKey(
+        "users.id", ondelete="CASCADE"), nullable=False)
+    user = relationship("User")
+    createdAt = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=text('now()'))
 
 
 class OfficeSpaceRequest(Base):
@@ -93,7 +110,11 @@ class OfficeSpaceRequest(Base):
     budgetPerDay = Column(Integer, nullable=False)
     numberOfDays = Column(Integer, nullable=False)
     isPaid = Column(Boolean, nullable=False)
-    createdAt = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    userId = Column(Integer, ForeignKey(
+        "users.id", ondelete="CASCADE"), nullable=False)
+    user = relationship("User")
+    createdAt = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=text('now()'))
 
 
 class PropertyManagement(Base):
@@ -104,7 +125,11 @@ class PropertyManagement(Base):
     phone = Column(String, nullable=False)
     email = Column(String, nullable=False)
     address = Column(String, nullable=False)
-    createdAt = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    userId = Column(Integer, ForeignKey(
+        "users.id", ondelete="CASCADE"), nullable=False)
+    user = relationship("User")
+    createdAt = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=text('now()'))
 
 
 class ShortletRequest(Base):
@@ -120,7 +145,11 @@ class ShortletRequest(Base):
     budgetPerDay = Column(Integer, nullable=False)
     numberOfDays = Column(Integer, nullable=False)
     isPaid = Column(Boolean, nullable=False)
-    createdAt = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    userId = Column(Integer, ForeignKey(
+        "users.id", ondelete="CASCADE"), nullable=False)
+    user = relationship("User")
+    createdAt = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=text('now()'))
 
 
 class Consultation(Base):
@@ -133,7 +162,11 @@ class Consultation(Base):
     email = Column(String, nullable=False)
     message = Column(String, nullable=False)
     contactMethod = Column(String, nullable=False)
-    createdAt = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    userId = Column(Integer, ForeignKey(
+        "users.id", ondelete="CASCADE"), nullable=False)
+    user = relationship("User")
+    createdAt = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=text('now()'))
 
 
 class Payments(Base):
@@ -141,5 +174,7 @@ class Payments(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     serviceId = Column(Integer, nullable=False)
-    userId = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    userId = Column(Integer, ForeignKey(
+        "users.id", ondelete="CASCADE"), nullable=False)
+    user = relationship("User")
     amount = Column(Integer, nullable=False)
