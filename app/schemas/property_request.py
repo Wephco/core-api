@@ -24,7 +24,7 @@ class UpdatePropertyRequest(BaseModel):
     budgetRange: str
     maxBudget: str
     isPaid: bool
-    notes: Optional[str] = None
+    notes: str
 
 
 class CreatePropertyRequestResponse(BaseModel):
@@ -34,11 +34,11 @@ class CreatePropertyRequestResponse(BaseModel):
     numberOfrooms: int
     budgetRange: str
     maxBudget: str
-    notes: Optional[str] = None
+    notes: str
     isPaid: bool
     createdAt: datetime
     userId: int
     user: UserBase
-    
+
     class Config:
         orm_mode = True
