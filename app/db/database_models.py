@@ -3,9 +3,9 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy.orm import relationship, Mapped
+from sqlalchemy.orm import relationship
 from .database import Base
-from ..utils.enums import Roles
+from ..utils.enums import Roles, PropertyTypes
 
 
 class User(Base):
@@ -58,13 +58,13 @@ class PropertyListing(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     location = Column(String, nullable=False)
-    propertyType = Column(String, nullable=False)
+    propertyType = Column(String, nullable=False, default=PropertyTypes.house)
     propertyImages = Column(ARRAY(String), nullable=False)
-    numberOfrooms = Column(Integer)
-    numberOfToilets = Column(Integer)
-    numberOfBathrooms = Column(Integer)
-    numberOfLivingRooms = Column(Integer)
-    numberOfKitchens = Column(Integer)
+    numberOfrooms = Column(Integer, default=0)
+    numberOfToilets = Column(Integer, default=0)
+    numberOfBathrooms = Column(Integer, default=0)
+    numberOfLivingRooms = Column(Integer, default=0)
+    numberOfKitchens = Column(Integer, default=0)
     agentId = Column(Integer, ForeignKey(
         "agents.id", ondelete="CASCADE"), nullable=False)
     agent = relationship("Agent", back_populates="propertyListings")

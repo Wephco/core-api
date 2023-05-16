@@ -1,7 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
-from .api_response import ApiResponse
 
 
 class UserBase(BaseModel):
