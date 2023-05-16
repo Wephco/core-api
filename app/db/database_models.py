@@ -1,7 +1,9 @@
+from typing import List
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
-from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.orm import relationship, Mapped
 from .database import Base
 from ..utils.enums import Roles
 
@@ -17,6 +19,20 @@ class User(Base):
     role = Column(String, default=Roles.customer)
     createdAt = Column(TIMESTAMP(timezone=True),
                        nullable=False, server_default=text('now()'))
+
+
+class Agent(Base):
+    __tablename__ = "agents"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    name = Column(String, nullable=False)
+    email = Column(String, nullable=False, unique=True)
+    address = Column(String, nullable=False)
+    phoneNumber = Column(String, nullable=False)
+    createdAt = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=text('now()'))
+    propertyListings: List["PropertyListing"] = relationship(
+        "PropertyListing", back_populates="agent")
 
 
 class PropertyRequest(Base):
@@ -35,6 +51,25 @@ class PropertyRequest(Base):
     userId = Column(Integer, ForeignKey(
         "users.id", ondelete="CASCADE"), nullable=False)
     user = relationship("User")
+
+
+class PropertyListing(Base):
+    __tablename__ = "propertyListings"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    location = Column(String, nullable=False)
+    propertyType = Column(String, nullable=False)
+    propertyImages = Column(ARRAY(String), nullable=False)
+    numberOfrooms = Column(Integer)
+    numberOfToilets = Column(Integer)
+    numberOfBathrooms = Column(Integer)
+    numberOfLivingRooms = Column(Integer)
+    numberOfKitchens = Column(Integer)
+    agentId = Column(Integer, ForeignKey(
+        "agents.id", ondelete="CASCADE"), nullable=False)
+    agent = relationship("Agent", back_populates="propertyListings")
+    createdAt = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=text('now()'))
 
 
 class HotelRequest(Base):
