@@ -6,3 +6,10 @@ class Roles(str, Enum):
     support = "support"
     staff = "staff"
     customer = "customer"
+    agent = "agent"
+
+
+class Services(str, Enum):
+    propertyRequest = "propertyRequest"
+    hotelRequest = "hotelRequest"
+    propertyListing = "propertyListing"
