@@ -33,14 +33,14 @@ async def create_property_request(property_request: PropertyRequestBase, db: Ses
 
 
 @router.get("/", response_model=List[CreatePropertyRequestResponse])
-def get_property_requests(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def get_all_property_requests(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
 
     propertyRequests = db.query(PropertyRequest).all()
     return propertyRequests
 
 
 @router.get("/{id}", response_model=CreatePropertyRequestResponse)
-def get_property_request(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def get_a_property_request(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
 
     property_request = db.query(PropertyRequest).filter(
         PropertyRequest.id == id).first()
@@ -53,7 +53,7 @@ def get_property_request(id: int, db: Session = Depends(get_db), current_user: U
 
 
 @router.put("/{id}", response_model=CreatePropertyRequestResponse)
-def update_request(id: int, updated_request: UpdatePropertyRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def update_a_request(id: int, updated_request: UpdatePropertyRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
 
     propertyRequestQuery = db.query(
         PropertyRequest).filter(PropertyRequest.id == id)
@@ -77,7 +77,7 @@ def update_request(id: int, updated_request: UpdatePropertyRequest, db: Session 
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_property_request(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def delete_a_property_request(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
 
     propertyRequestQuery = db.query(
         PropertyRequest).filter(PropertyRequest.id == id)

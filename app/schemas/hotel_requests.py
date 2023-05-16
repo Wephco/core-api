@@ -13,7 +13,7 @@ class HotelRequestBase(BaseModel):
     numberOfGuests: int
     numberOfRooms: int
     budgetPerRoom: int
-    notes: Optional[str] = None
+    # notes: Optional[str] = None
 
 
 class HotelRequestResponse(BaseModel):
@@ -36,6 +36,5 @@ class HotelRequestResponse(BaseModel):
 
 
 class UpdateHotelRequest(HotelRequestBase):
-    id: int
     isPaid: bool
-    userId: int
+

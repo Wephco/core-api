@@ -50,7 +50,7 @@ class HotelRequest(Base):
     numberOfRooms = Column(Integer, nullable=False)
     budgetPerRoom = Column(Integer, nullable=False)
     isPaid = Column(Boolean, nullable=False)
-    notes = Column(String)
+    # notes = Column(String)
     userId = Column(Integer, ForeignKey(
         "users.id", ondelete="CASCADE"), nullable=False)
     user = relationship("User")
