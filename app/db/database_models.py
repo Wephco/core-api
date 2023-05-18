@@ -1,11 +1,11 @@
 from typing import List
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Enum
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
 from .database import Base
-from ..utils.enums import Roles, PropertyTypes
+from ..utils.enums import Roles, PropertyTypes, Services
 
 
 class User(Base):
@@ -209,7 +209,7 @@ class Payments(Base):
     __tablename__ = "payments"
 
     id = Column(Integer, primary_key=True, nullable=False)
-    serviceId = Column(Integer, nullable=False)
+    service = Column(Enum(Services), nullable=False)
     userId = Column(Integer, ForeignKey(
         "users.id", ondelete="CASCADE"), nullable=False)
     user = relationship("User")
