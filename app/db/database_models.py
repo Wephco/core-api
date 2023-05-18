@@ -209,7 +209,7 @@ class Payments(Base):
     __tablename__ = "payments"
 
     id = Column(Integer, primary_key=True, nullable=False)
-    service = Column(Enum(Services), nullable=False)
+    service = Column(Enum(Services), nullable=False, default=Services.propertyRequest)
     userId = Column(Integer, ForeignKey(
         "users.id", ondelete="CASCADE"), nullable=False)
     user = relationship("User")
