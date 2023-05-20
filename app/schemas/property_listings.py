@@ -1,8 +1,6 @@
-from pydantic import BaseModel, EmailStr
-from typing import Any, List
+from pydantic import BaseModel
+from typing import List
 from datetime import datetime
-from .agents import AgentBase
-
 
 class PropertyListingBase(BaseModel):
     location: str
@@ -23,7 +21,6 @@ class PropertyListingResponse(PropertyListingBase):
     id: int
     createdAt: datetime
     agentId: int
-    agent: AgentBase
 
     class Config:
         orm_mode = True
