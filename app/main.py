@@ -12,6 +12,13 @@ app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=[
                    "*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
+# root route
+
+
+@app.get("/")
+async def root():
+    return {"message": "API Running"}
+
 # add app routes
 app.include_router(users.router)
 app.include_router(auth.router)
