@@ -11,7 +11,7 @@ on:
       - admin
 
 jobs:
-  job1:
+  build:
     environment:
       name: staging
     runs-on: ubuntu-20.04
@@ -46,3 +46,29 @@ jobs:
         run: python -m pip install --upgrade pip
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Run tests
+        # run: pytest
+        run: echo "No tests"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      # pull github repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      # install heroku cli
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+      # login to heroku
+      - name: Login to Heroku
+        run: heroku container:login
+      # add heroku remote
+      - name: Add Heroku remote
+        run: heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
+      # push to heroku
+      - name: Push to Heroku
+        run: |
+          heroku container:push web --app ${{ secrets.HEROKU_APP_NAME }}
+          heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
