@@ -59,6 +59,7 @@ jobs:
       # pull github repository
       - name: Checkout repository
         uses: actions/checkout@v3
+
       # push to heroku using heroku-cli
       # - name: Install Heroku CLI
       #   run: |
@@ -81,3 +82,16 @@ jobs:
         with:
           herokuApiKey: ${{ secrets.HEROKU_API_KEY }}
           herokuAppName: ${{ secrets.HEROKU_APP_NAME }}
+
+      # auto deploy to ubuntu vm
+      # - name: Deploy to Ubuntu VM
+      #   uses: appleboy/ssh-action@v0.1.10
+      #   with:
+      #     host: ${{ secrets.UBUNTU_VM_HOST }}
+      #     username: ${{ secrets.UBUNTU_VM_USERNAME }}
+      #     password: ${{ secrets.UBUNTU_VM_PASSWORD }}
+      #     script: |
+      #       cd app/src
+      #       git pull
+      #       echo ${{ secrets.UBUNTU_VM_PASSWORD }} | sudo -S systemcl restart api
+
