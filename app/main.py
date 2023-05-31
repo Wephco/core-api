@@ -18,7 +18,7 @@ app.add_middleware(CORSMiddleware, allow_origins=[
 
 @app.get("/")
 async def root():
-    return {"message": "API Running"}
+    return {"message": "Deployed from CI/CD Pipeline"}
 
 # add app routes
 app.include_router(users.router)

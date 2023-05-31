@@ -1,14 +1,14 @@
-name: Build and Deploy API
+name: Build, Test and Deploy to Heroku
 
 on:
   push:
     branches:
       - main
       - admin
-  pull_request:
-    branches:
-      - main
-      - admin
+  # pull_request:
+  #   branches:
+  #     - main
+  #     - admin
 
 jobs:
   build:
@@ -37,9 +37,9 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Python 3.10.1
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.10.1
       - name: Update pip
@@ -52,23 +52,32 @@ jobs:
 
   deploy:
     needs: build
+    environment:
+      name: Production
     runs-on: ubuntu-20.04
     steps:
       # pull github repository
       - name: Checkout repository
-        uses: actions/checkout@v2
-      # install heroku cli
-      - name: Install Heroku CLI
-        run: |
-          curl https://cli-assets.heroku.com/install.sh | sh
+        uses: actions/checkout@v3
+      # push to heroku using heroku-cli
+      # - name: Install Heroku CLI
+      #   run: |
+      #     curl https://cli-assets.heroku.com/install.sh | sh
       # login to heroku
-      - name: Login to Heroku
-        run: heroku container:login
+      # - name: Login to Heroku
+      #   run: heroku container:login
       # add heroku remote
-      - name: Add Heroku remote
-        run: heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
+      # - name: Add Heroku remote
+      #   run: heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
       # push to heroku
-      - name: Push to Heroku
-        run: |
-          heroku container:push web --app ${{ secrets.HEROKU_APP_NAME }}
-          heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+      # - name: Push to Heroku
+      #   run: |
+      #     heroku container:push web --app ${{ secrets.HEROKU_APP_NAME }}
+      #     heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+
+      # auto deploy to heroku
+      - name: Deploy to Heroku
+        uses: ElayGelbart/Heroku-Auto-Deployment@v1.0.6
+        with:
+          herokuApiKey: ${{ secrets.HEROKU_API_KEY }}
+          herokuAppName: ${{ secrets.HEROKU_APP_NAME }}
