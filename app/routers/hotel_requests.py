@@ -11,7 +11,7 @@ from ..utils.enums import Roles
 
 
 router = APIRouter(
-    prefix='/hotel-request',
+    prefix='/api/hotel-request',
     tags=['Hotel Request']
 )
 

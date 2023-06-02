@@ -7,7 +7,7 @@ from ..auth.hash import verify_password
 from ..auth.oauth import create_access_token
 
 router = APIRouter(
-    prefix="/auth",
+    prefix="/api/auth",
     tags=["Auth"]
 )
 

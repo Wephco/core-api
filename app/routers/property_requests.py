@@ -11,7 +11,7 @@ from ..utils.enums import Roles
 
 
 router = APIRouter(
-    prefix="/property-request",
+    prefix="/api/property-request",
     tags=["Property Requests"]
 )
 

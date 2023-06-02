@@ -9,7 +9,7 @@ from ..utils.enums import Roles
 
 
 router = APIRouter(
-    prefix="/agents",
+    prefix="/api/agents",
     tags=["Agents"]
 )
 

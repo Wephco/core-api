@@ -8,7 +8,7 @@ from ..auth import oauth
 from ..utils.enums import Roles
 
 router = APIRouter(
-    prefix="/user",
+    prefix="/api/user",
     tags=['User']
 )
 
