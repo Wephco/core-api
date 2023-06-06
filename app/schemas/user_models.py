@@ -15,6 +15,7 @@ class UserBase(BaseModel):
 class CreateUser(UserBase):
     password: str
     role: Optional[str] = 'customer'
+    referralCode: Optional[str] = None
 
 
 class CreateUserResponse(UserBase):

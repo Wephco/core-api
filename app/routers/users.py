@@ -22,6 +22,10 @@ def create_user_without_password(user: CreateUser, db: Session = Depends(databas
     else:
         hashed_password = hash.hash_password(user.phoneNumber)
         user.password = hashed_password
+
+        if user.referralCode.lower() != 'wephco':
+            user.role = 'customer'
+
         new_user = database_models.User(**user.dict())
         db.add(new_user)
         db.commit()
