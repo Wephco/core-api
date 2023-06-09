@@ -15,7 +15,6 @@ class UserBase(BaseModel):
 class CreateUser(UserBase):
     password: str
     role: Optional[str] = 'customer'
-    referralCode: Optional[str] = None
 
 
 class CreateUserResponse(UserBase):
@@ -41,3 +40,9 @@ class LoginUserResponse(UserBase):
 
 class TokenData(BaseModel):
     id: Optional[str] = None
+
+
+class PasswordReset(BaseModel):
+    email: EmailStr
+    password: str
+    confirmPassword: str

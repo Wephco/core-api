@@ -5,7 +5,7 @@ from ..db import database_models
 from ..schemas.user_models import CreateUser, CreateUserResponse
 from ..auth import hash
 from ..auth import oauth
-from ..utils.enums import Roles
+from ..utils.enums import Roles, AuthorizationCodes
 
 router = APIRouter(
     prefix="/api/user",
@@ -23,8 +23,7 @@ def create_user_without_password(user: CreateUser, db: Session = Depends(databas
         hashed_password = hash.hash_password(user.phoneNumber)
         user.password = hashed_password
 
-        if user.referralCode.lower() != 'wephco':
-            user.role = 'customer'
+        user.role = Roles.customer
 
         new_user = database_models.User(**user.dict())
         db.add(new_user)
@@ -34,10 +33,14 @@ def create_user_without_password(user: CreateUser, db: Session = Depends(databas
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=CreateUserResponse)
-def create_user(user: CreateUser, db: Session = Depends(database.get_db)):
+def create_user(authorizationCode: str, user: CreateUser, db: Session = Depends(database.get_db)):
     # hash user password and replace plain text password with hashed password
     hashed_password = hash.hash_password(user.password)
     user.password = hashed_password
+
+    if authorizationCode != AuthorizationCodes.super_admin or authorizationCode != AuthorizationCodes.wephco_admin or authorizationCode != AuthorizationCodes.wephco_ceo:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Invalid Authorization Code")
 
     new_user = database_models.User(**user.dict())
     db.add(new_user)
@@ -45,6 +48,22 @@ def create_user(user: CreateUser, db: Session = Depends(database.get_db)):
     db.refresh(new_user)
 
     return new_user
+
+
+@router.get("/", response_model=list[CreateUserResponse])
+def get_users(authorizationCode: str, db: Session = Depends(database.get_db), current_user: database_models.User = Depends(oauth.get_current_user)):
+
+    users = db.query(database_models.User).all()
+
+    if authorizationCode != AuthorizationCodes.super_admin or authorizationCode != AuthorizationCodes.wephco_admin or authorizationCode != AuthorizationCodes.wephco_ceo:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Invalid Authorization Code")
+        
+    if not users:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="No Users Found")
+
+    return users
 
 
 @router.get("/{id}", response_model=CreateUserResponse)

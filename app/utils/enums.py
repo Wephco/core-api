@@ -7,6 +7,7 @@ class Roles(str, Enum):
     staff = "staff"
     customer = "customer"
     agent = "agent"
+    super_admin = "super_admin"
 
 
 class Services(str, Enum):
@@ -40,3 +41,9 @@ class PropertyTypes(str, Enum):
     house = "house"
     room = "room"
     other = "other"
+
+
+class AuthorizationCodes(str, Enum):
+    wephco_admin = "wephco_admin"
+    wephco_ceo = "wephco_ceo"
+    super_admin = "neto"
