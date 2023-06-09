@@ -37,11 +37,8 @@ async def create_hotel_request(hotel_request: HotelRequestBase, db: Session = De
 @router.get('/', response_model=List[HotelRequestResponse])
 async def get_all_hotel_requests(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
 
-    if current_user.role != Roles.admin:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
-
     hotel_requests = db.query(HotelRequest).all()
+
     return hotel_requests
 
 
@@ -50,6 +47,10 @@ async def get_a_hotel_request(id: int, db: Session = Depends(get_db), current_us
 
     hotel_request = db.query(HotelRequest).filter(
         HotelRequest.id == id).first()
+
+    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.support):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
 
     if not hotel_request:
         raise HTTPException(
@@ -67,7 +68,7 @@ async def update_a_hotel_request(id: int, updated_request: UpdateHotelRequest, d
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail='Request not Found')
 
-    if current_user.role == Roles.customer:
+    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.support):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
 
@@ -88,7 +89,7 @@ async def delete_a_hotel_request(id: int, db: Session = Depends(get_db), current
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail='Request not Found')
 
-    if current_user.role == Roles.customer:
+    if current_user.role not in (Roles.admin, Roles.super_admin):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
 

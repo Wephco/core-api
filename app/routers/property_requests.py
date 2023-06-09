@@ -45,6 +45,10 @@ def get_a_property_request(id: int, db: Session = Depends(get_db), current_user:
     property_request = db.query(PropertyRequest).filter(
         PropertyRequest.id == id).first()
 
+    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.support):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
+
     if not property_request:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Request not Found")
@@ -64,7 +68,7 @@ def update_a_request(id: int, updated_request: UpdatePropertyRequest, db: Sessio
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Request does not exist")
 
-    if current_user.role == Roles.customer:
+    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Action not authorized")
 
@@ -88,7 +92,7 @@ def delete_a_property_request(id: int, db: Session = Depends(get_db), current_us
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Request does not exist")
 
-    if current_user.role == Roles.customer:
+    if current_user.role not in (Roles.admin, Roles.super_admin):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Action not authorized")
 

@@ -32,10 +32,6 @@ async def create_agent(agent: AgentBase, db: Session = Depends(get_db), current_
 @router.get('/', response_model=List[AgentResponse])
 async def get_agents(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
 
-    if current_user.role != Roles.admin:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
-
     agents = db.query(Agent).all()
 
     return agents
@@ -44,7 +40,7 @@ async def get_agents(db: Session = Depends(get_db), current_user: User = Depends
 @router.get('/{id}', response_model=AgentResponse)
 async def get_agent(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
 
-    if current_user.role != Roles.admin:
+    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.agent, Roles.support):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
 
@@ -60,7 +56,7 @@ async def get_agent(id: int, db: Session = Depends(get_db), current_user: User =
 @router.put('/{id}', status_code=status.HTTP_202_ACCEPTED, response_model=AgentResponse)
 async def update_agent(id: int, agent: AgentBase, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
 
-    if current_user.role != Roles.admin:
+    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
 
@@ -82,7 +78,7 @@ async def update_agent(id: int, agent: AgentBase, db: Session = Depends(get_db),
 @router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_agent(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
 
-    if current_user.role != Roles.admin:
+    if current_user.role not in (Roles.admin, Roles.super_admin):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
 

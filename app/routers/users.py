@@ -38,7 +38,7 @@ def create_user(authorizationCode: str, user: CreateUser, db: Session = Depends(
     hashed_password = hash.hash_password(user.password)
     user.password = hashed_password
 
-    if authorizationCode != AuthorizationCodes.super_admin or authorizationCode != AuthorizationCodes.wephco_admin or authorizationCode != AuthorizationCodes.wephco_ceo:
+    if authorizationCode not in (AuthorizationCodes.super_admin, AuthorizationCodes.wephco_admin,  AuthorizationCodes.wephco_ceo):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Invalid Authorization Code")
 
@@ -71,11 +71,11 @@ def get_user(id: int, db: Session = Depends(database.get_db), current_user: data
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not Found")
 
-    if current_user.role == Roles.admin:
-        return user
-    else:
+    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.support, Roles.staff):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail='Operation not allowed')
+
+    return user
 
 
 # Implement edit a user by id
@@ -88,16 +88,16 @@ def edit_user(id: int, user: CreateUser, db: Session = Depends(database.get_db),
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not Found")
 
-    if current_user.role == Roles.admin or current_user.role == Roles.super_admin or current_user.role == Roles.support or current_user.role == Roles.staff:
-        db_user.name = user.name
-        db_user.email = user.email
-        db_user.phoneNumber = user.phoneNumber
-        db_user.role = user.role
-
-        db.commit()
-        db.refresh(db_user)
-
-        return db_user
-    else:
+    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff):
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail='Operation not allowed')
+            status_code=status.HTTP_403_FORBIDDEN, detail="Action not authorized")
+
+    db_user.name = user.name
+    db_user.email = user.email
+    db_user.phoneNumber = user.phoneNumber
+    db_user.role = user.role
+
+    db.commit()
+    db.refresh(db_user)
+
+    return db_user
