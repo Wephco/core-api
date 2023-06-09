@@ -46,3 +46,4 @@ class PasswordReset(BaseModel):
     email: EmailStr
     password: str
     confirmPassword: str
+    authorizationCode: Optional[str] = None

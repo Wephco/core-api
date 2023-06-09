@@ -76,3 +76,28 @@ def get_user(id: int, db: Session = Depends(database.get_db), current_user: data
     else:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail='Operation not allowed')
+
+
+# Implement edit a user by id
+@router.put("/{id}", response_model=CreateUserResponse)
+def edit_user(id: int, user: CreateUser, db: Session = Depends(database.get_db), current_user: database_models.User = Depends(oauth.get_current_user)):
+    db_user = db.query(database_models.User).filter(
+        database_models.User.id == id).first()
+
+    if not db_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not Found")
+
+    if current_user.role == Roles.admin or current_user.role == Roles.super_admin or current_user.role == Roles.support or current_user.role == Roles.staff:
+        db_user.name = user.name
+        db_user.email = user.email
+        db_user.phoneNumber = user.phoneNumber
+        db_user.role = user.role
+
+        db.commit()
+        db.refresh(db_user)
+
+        return db_user
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail='Operation not allowed')

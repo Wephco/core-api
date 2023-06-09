@@ -13,6 +13,25 @@ router = APIRouter(
 )
 
 
+@router.post("/register", status_code=status.HTTP_201_CREATED, response_model=LoginUserResponse)
+def register(user: CreateUser, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.email == user.email).first()
+
+    if db_user:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail="User already exists")
+
+    hashed_password = hash_password(user.password)
+    user.password = hashed_password
+
+    new_user = User(**user.dict())
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    return new_user
+
+
 @router.post("/login", response_model=LoginUserResponse)
 def login(user_credentials: LoginUser, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == user_credentials.email).first()
@@ -37,27 +56,19 @@ def login(user_credentials: LoginUser, db: Session = Depends(get_db)):
     }
 
 
-@router.post('/password/reset', status_code=status.HTTP_204_NO_CONTENT, response_model=LoginUserResponse)
-def reset_password(authorizationCode: str, body: PasswordReset, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-
-    user_query = db.query(User).filter(User.email == body.email)
-
-    user = user_query.first()
+# Implement password reset
+@router.post("/password-reset", status_code=status.HTTP_200_OK)
+def password_reset(password_reset: PasswordReset, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == password_reset.email).first()
 
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="User not Found")
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
-    if authorizationCode != AuthorizationCodes.super_admin or authorizationCode != AuthorizationCodes.wephco_admin or authorizationCode != AuthorizationCodes.wephco_ceo:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Invalid Authorization Code")
-
-    hashed_password = hash_password(body.password)
-    updated_user = CreateUser(name=user.name, email=user.email,
-                              phoneNumber=user.phoneNumber, password=hashed_password, role=user.role)
-    user_query.update(updated_user.dict(), synchronize_session=False)
+    hashed_password = hash_password(password_reset.password)
+    user.password = hashed_password
 
     db.commit()
-    db.refresh(user)
 
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    return Response(status_code=status.HTTP_200_OK)
+

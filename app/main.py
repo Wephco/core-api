@@ -1,9 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 
-# from .db import database_models, database
-from .routers import users, auth, property_requests, hotel_requests, agents, property_listings
+from .routers import property_requests, hotel_requests, agents, property_listings, users, auth
 
 # database_models.Base.metadata.create_all(bind=database.engine)
 
@@ -18,7 +16,7 @@ app.add_middleware(CORSMiddleware, allow_origins=[
 
 @app.get("/")
 async def root():
-    return {"message": "Deployed from CI/CD Pipeline"}
+    return {"Wephco Core API": "Deployed from CI/CD Pipeline"}
 
 # add app routes
 app.include_router(users.router)
