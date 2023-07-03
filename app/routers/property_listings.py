@@ -26,9 +26,9 @@ async def create_property_listing(property_listing: PropertyListingBase, db: Ses
 
 
 @router.get('/', response_model=List[PropertyListingResponse])
-async def get_property_listings(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def get_property_listings(db: Session = Depends(get_db), isDiaspora: bool = False):
 
-    property_listings = db.query(PropertyListing).all()
+    property_listings = db.query(PropertyListing).filter(PropertyListing.isDiaspora == isDiaspora).all()
 
     return property_listings
 
