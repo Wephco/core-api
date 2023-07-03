@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import property_requests, hotel_requests, agents, property_listings, users, auth
+from .routers import property_requests, hotel_requests, agents, property_listings, users, auth, consultation
 
 # database_models.Base.metadata.create_all(bind=database.engine)
 
@@ -25,6 +25,7 @@ app.include_router(property_requests.router)
 app.include_router(hotel_requests.router)
 app.include_router(agents.router)
 app.include_router(property_listings.router)
+app.include_router(consultation.router)
 
 
 # if __name__ == "__main__":
