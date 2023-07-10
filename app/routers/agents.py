@@ -14,6 +14,12 @@ router = APIRouter(
 )
 
 
+def get_agentId_using_agent_name(agentName: str, db: Session = Depends(get_db)):
+    agent = db.query(Agent).filter(Agent.name == agentName).first()
+
+    return agent
+
+
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=AgentResponse)
 async def create_agent(agent: AgentBase, db: Session = Depends(get_db)):
 

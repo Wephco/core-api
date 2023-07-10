@@ -1,6 +1,7 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from datetime import datetime
+
 
 class PropertyListingBase(BaseModel):
     location: str
@@ -12,6 +13,7 @@ class PropertyListingBase(BaseModel):
     numberOfLivingRooms: int
     numberOfKitchens: int
     agentId: int
+    agentName: Optional[str]
 
     class Config:
         orm_mode = True

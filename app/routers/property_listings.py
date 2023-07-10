@@ -6,6 +6,7 @@ from ..schemas.property_listings import PropertyListingBase, PropertyListingResp
 from ..auth.oauth import get_current_user
 from typing import List
 from ..utils.enums import Roles
+from .agents import get_agentId_using_agent_name
 
 
 router = APIRouter(
@@ -16,6 +17,14 @@ router = APIRouter(
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=PropertyListingResponse)
 async def create_property_listing(property_listing: PropertyListingBase, db: Session = Depends(get_db)):
+
+    agent = get_agentId_using_agent_name(property_listing.agentName, db)
+
+    if not agent:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Agent does not exist. Create agent first before creating a listing')
+
+    property_listing.agentId = agent.id
 
     new_property_listing = PropertyListing(**property_listing.dict())
     db.add(new_property_listing)
