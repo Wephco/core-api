@@ -7,22 +7,12 @@ from .routers import property_requests, hotel_requests, agents, property_listing
 
 app = FastAPI()
 
-origins = [
-    "http://localhost.com",
-    "http://localhost.com:5173",
-    "http://127.0.0.1:5173"
-    "https://wephco.com"
-]
+origins = ["*"]
 
 # CORS Middleware Config
-app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=origins,
+                   allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
-# root route
-
-
-@app.get("/")
-async def root():
-    return {"Wephco Core API": "Deployed from CI/CD Pipeline"}
 
 # add app routes
 app.include_router(users.router)
@@ -32,6 +22,11 @@ app.include_router(hotel_requests.router)
 app.include_router(agents.router)
 app.include_router(property_listings.router)
 app.include_router(consultation.router)
+
+
+@app.get("/")
+async def root():
+    return {"Wephco Core API": "Deployed from CI/CD Pipeline"}
 
 
 # if __name__ == "__main__":
