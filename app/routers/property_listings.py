@@ -15,7 +15,7 @@ router = APIRouter(
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=PropertyListingResponse)
-async def create_property_listing(property_listing: PropertyListingBase, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def create_property_listing(property_listing: PropertyListingBase, db: Session = Depends(get_db)):
 
     new_property_listing = PropertyListing(**property_listing.dict())
     db.add(new_property_listing)
@@ -26,9 +26,9 @@ async def create_property_listing(property_listing: PropertyListingBase, db: Ses
 
 
 @router.get('/', response_model=List[PropertyListingResponse])
-async def get_property_listings(db: Session = Depends(get_db), isDiaspora: bool = False):
+async def get_property_listings(db: Session = Depends(get_db)):
 
-    property_listings = db.query(PropertyListing).filter(PropertyListing.isDiaspora == isDiaspora).all()
+    property_listings = db.query(PropertyListing).all()
 
     return property_listings
 
