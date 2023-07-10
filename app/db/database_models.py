@@ -59,7 +59,6 @@ class PropertyListing(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     location = Column(String, nullable=False)
     propertyType = Column(String, nullable=False, default=PropertyTypes.house)
-    isDiaspora = Column(Boolean, nullable=False)
     propertyImages = Column(ARRAY(String), nullable=False)
     numberOfrooms = Column(Integer, default=0)
     numberOfToilets = Column(Integer, default=0)
