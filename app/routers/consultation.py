@@ -38,21 +38,21 @@ async def create_consultation_request(consultation_request: ConsultationBase, db
 
 
 @router.get("/", response_model=List[ConsultationResponse])
-def get_all_consultation_requests(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def get_all_consultation_requests(db: Session = Depends(get_db)):
 
     consultationRequests = db.query(Consultation).all()
     return consultationRequests
 
 
 @router.get("/{id}", response_model=ConsultationResponse)
-def get_a_consultation_request(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def get_a_consultation_request(id: int, db: Session = Depends(get_db)):
 
     consultation_request = db.query(Consultation).filter(
         Consultation.id == id).first()
 
-    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.support):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
+    # if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.support):
+    #     raise HTTPException(
+    #         status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
 
     if not consultation_request:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,

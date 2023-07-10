@@ -15,11 +15,11 @@ router = APIRouter(
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=AgentResponse)
-async def create_agent(agent: AgentBase, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def create_agent(agent: AgentBase, db: Session = Depends(get_db)):
 
-    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.support):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
+    # if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.support):
+    #     raise HTTPException(
+    #         status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
 
     new_agent = Agent(**agent.dict())
     db.add(new_agent)
@@ -30,11 +30,11 @@ async def create_agent(agent: AgentBase, db: Session = Depends(get_db), current_
 
 
 @router.get('/', response_model=List[AgentResponse])
-async def get_agents(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def get_agents(db: Session = Depends(get_db)):
 
-    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.support):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
+    # if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.support):
+    #     raise HTTPException(
+    #         status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
 
     agents = db.query(Agent).all()
 
@@ -42,11 +42,11 @@ async def get_agents(db: Session = Depends(get_db), current_user: User = Depends
 
 
 @router.get('/{id}', response_model=AgentResponse)
-async def get_agent(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def get_agent(id: int, db: Session = Depends(get_db)):
 
-    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.support):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
+    # if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.support):
+    #     raise HTTPException(
+    #         status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
 
     agent = db.query(Agent).filter(Agent.id == id).first()
 

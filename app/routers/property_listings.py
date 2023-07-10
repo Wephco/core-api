@@ -34,11 +34,11 @@ async def get_property_listings(db: Session = Depends(get_db)):
 
 
 @router.get('/{id}', response_model=PropertyListingResponse)
-async def get_property_listing(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def get_property_listing(id: int, db: Session = Depends(get_db)):
 
-    if current_user.role not in (Roles.support, Roles.admin, Roles.staff, Roles.super_admin):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
+    # if current_user.role not in (Roles.support, Roles.admin, Roles.staff, Roles.super_admin):
+    #     raise HTTPException(
+    #         status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
 
     property_listing = db.query(PropertyListing).filter(
         PropertyListing.id == id).first()
