@@ -26,7 +26,17 @@ async def create_property_listing(property_listing: PropertyListingBase, db: Ses
 
     property_listing.agentId = agent.id
 
-    new_property_listing = PropertyListing(**property_listing.dict())
+    new_property_listing = PropertyListing(
+        location=property_listing.location,
+        propertyType=property_listing.propertyType,
+        propertyImages=property_listing.propertyImages,
+        numberOfrooms=property_listing.numberOfrooms,
+        numberOfToilets=property_listing.numberOfToilets,
+        numberOfBathrooms=property_listing.numberOfBathrooms,
+        numberOfLivingRooms=property_listing.numberOfLivingRooms,
+        numberOfKitchens=property_listing.numberOfKitchens,
+        agentId=agent.id
+    )
     db.add(new_property_listing)
     db.commit()
     db.refresh(new_property_listing)
