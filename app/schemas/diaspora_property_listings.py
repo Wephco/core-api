@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from datetime import datetime
 
 
@@ -13,7 +13,7 @@ class DiasporaPropertyListingBase(BaseModel):
     numberOfLivingRooms: int
     numberOfKitchens: int
     agentId: int
-    agentName: str
+    agentName: Optional[str] = ''
 
     class Config:
         orm_mode = True
