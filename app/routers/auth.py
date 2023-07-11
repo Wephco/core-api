@@ -4,8 +4,8 @@ from ..db.database import get_db
 from ..db.database_models import User
 from ..schemas.user_models import LoginUser, LoginUserResponse, PasswordReset, CreateUser
 from ..auth.hash import verify_password, hash_password
-from ..auth.oauth import create_access_token, get_current_user
-from ..utils.enums import AuthorizationCodes
+from ..auth.oauth import create_access_token
+# from ..utils.enums import AuthorizationCodes
 
 router = APIRouter(
     prefix="/api/auth",
