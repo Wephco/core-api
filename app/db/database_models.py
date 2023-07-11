@@ -70,6 +70,27 @@ class PropertyListing(Base):
     agent = relationship("Agent", back_populates="propertyListings")
     createdAt = Column(TIMESTAMP(timezone=True),
                        nullable=False, server_default=text('now()'))
+    
+
+
+class DiasporaPropertyListing(Base):
+    __tablename__ = "diasporaPropertyListings"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    location = Column(String, nullable=False)
+    propertyType = Column(String, nullable=False, default=PropertyTypes.house)
+    propertyImages = Column(ARRAY(String), nullable=False)
+    numberOfrooms = Column(Integer, default=0)
+    numberOfToilets = Column(Integer, default=0)
+    numberOfBathrooms = Column(Integer, default=0)
+    numberOfLivingRooms = Column(Integer, default=0)
+    numberOfKitchens = Column(Integer, default=0)
+    agentId = Column(Integer, ForeignKey(
+        "agents.id", ondelete="CASCADE"), nullable=False)
+    agent = relationship("Agent", back_populates="diasporaPropertyListings")
+    createdAt = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=text('now()'))
+
 
 
 class HotelRequest(Base):

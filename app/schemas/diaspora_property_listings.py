@@ -3,7 +3,7 @@ from typing import List
 from datetime import datetime
 
 
-class PropertyListingBase(BaseModel):
+class DiasporaPropertyListingBase(BaseModel):
     location: str
     propertyType: str
     propertyImages: List[str]
@@ -19,7 +19,7 @@ class PropertyListingBase(BaseModel):
         orm_mode = True
 
 
-class PropertyListingResponse(PropertyListingBase):
+class DiasporaPropertyListingResponse(DiasporaPropertyListingBase):
     id: int
     createdAt: datetime
     agentId: int
