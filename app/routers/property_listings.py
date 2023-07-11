@@ -35,7 +35,8 @@ async def create_property_listing(property_listing: PropertyListingBase, db: Ses
         numberOfBathrooms=property_listing.numberOfBathrooms,
         numberOfLivingRooms=property_listing.numberOfLivingRooms,
         numberOfKitchens=property_listing.numberOfKitchens,
-        agentId=agent.id
+        agentId=agent.id,
+        agentName=agent.name
     )
     db.add(new_property_listing)
     db.commit()

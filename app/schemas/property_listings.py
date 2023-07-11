@@ -23,7 +23,7 @@ class PropertyListingResponse(PropertyListingBase):
     id: int
     createdAt: datetime
     agentId: int
-    # agentName: str
+    agentName: str
 
     class Config:
         orm_mode = True
