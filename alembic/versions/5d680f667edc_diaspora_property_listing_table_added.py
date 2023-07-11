@@ -1,8 +1,8 @@
-"""added diaspora property listings table
+"""diaspora property listing table added
 
-Revision ID: 0396bbc2c027
+Revision ID: 5d680f667edc
 Revises: 4210d67086fa
-Create Date: 2023-07-11 01:39:56.775590
+Create Date: 2023-07-11 09:09:02.598548
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '0396bbc2c027'
+revision = '5d680f667edc'
 down_revision = '4210d67086fa'
 branch_labels = None
 depends_on = None

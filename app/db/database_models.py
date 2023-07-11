@@ -33,6 +33,8 @@ class Agent(Base):
                        nullable=False, server_default=text('now()'))
     propertyListings: List["PropertyListing"] = relationship(
         "PropertyListing", back_populates="agent")
+    diasporaPropertyListings: List["DiasporaPropertyListing"] = relationship(
+        "DiasporaPropertyListing", back_populates="agent")
 
 
 class PropertyRequest(Base):
@@ -70,7 +72,6 @@ class PropertyListing(Base):
     agent = relationship("Agent", back_populates="propertyListings")
     createdAt = Column(TIMESTAMP(timezone=True),
                        nullable=False, server_default=text('now()'))
-    
 
 
 class DiasporaPropertyListing(Base):
@@ -90,7 +91,6 @@ class DiasporaPropertyListing(Base):
     agent = relationship("Agent", back_populates="diasporaPropertyListings")
     createdAt = Column(TIMESTAMP(timezone=True),
                        nullable=False, server_default=text('now()'))
-
 
 
 class HotelRequest(Base):
@@ -230,7 +230,8 @@ class Payments(Base):
     __tablename__ = "payments"
 
     id = Column(Integer, primary_key=True, nullable=False)
-    service = Column(Enum(Services), nullable=False, default=Services.propertyRequest)
+    service = Column(Enum(Services), nullable=False,
+                     default=Services.propertyRequest)
     userId = Column(Integer, ForeignKey(
         "users.id", ondelete="CASCADE"), nullable=False)
     user = relationship("User")
