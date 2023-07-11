@@ -25,7 +25,7 @@ class Agent(Base):
     __tablename__ = "agents"
 
     id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String, nullable=False, unique=True)
+    name = Column(String, nullable=True, unique=True)
     email = Column(String, nullable=False, unique=True)
     address = Column(String, nullable=False)
     phoneNumber = Column(String, nullable=False)
