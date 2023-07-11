@@ -51,7 +51,7 @@ def create_user(authorizationCode: str, user: CreateUser, db: Session = Depends(
 
 
 @router.get("/", response_model=list[CreateUserResponse])
-def get_users(db: Session = Depends(database.get_db), current_user: database_models.User = Depends(oauth.get_current_user)):
+def get_users(db: Session = Depends(database.get_db)):
 
     users = db.query(database_models.User).all()
 

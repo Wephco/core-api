@@ -35,7 +35,7 @@ async def create_hotel_request(hotel_request: HotelRequestBase, db: Session = De
 
 
 @router.get('/', response_model=List[HotelRequestResponse])
-async def get_all_hotel_requests(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def get_all_hotel_requests(db: Session = Depends(get_db)):
 
     hotel_requests = db.query(HotelRequest).all()
 
@@ -43,14 +43,14 @@ async def get_all_hotel_requests(db: Session = Depends(get_db), current_user: Us
 
 
 @router.get('/{id}', response_model=HotelRequestResponse)
-async def get_a_hotel_request(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def get_a_hotel_request(id: int, db: Session = Depends(get_db)):
 
     hotel_request = db.query(HotelRequest).filter(
         HotelRequest.id == id).first()
 
-    if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.support):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
+    # if current_user.role not in (Roles.admin, Roles.super_admin, Roles.staff, Roles.support):
+    #     raise HTTPException(
+    #         status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized')
 
     if not hotel_request:
         raise HTTPException(
