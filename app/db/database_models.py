@@ -24,7 +24,7 @@ class User(Base):
 class Agent(Base):
     __tablename__ = "agents"
 
-    id = Column(Integer, primary_key=True, nullable=False, unique=True)
+    id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False, unique=True)
     email = Column(String, nullable=False, unique=True)
     address = Column(String, nullable=False)
@@ -69,8 +69,6 @@ class PropertyListing(Base):
     numberOfKitchens = Column(Integer, default=0)
     agentId = Column(Integer, ForeignKey(
         "agents.id", ondelete="CASCADE"), nullable=False)
-    agentName = Column(String, ForeignKey(
-        "agents.name", ondelete="CASCADE"), nullable=False)
     agent = relationship("Agent", back_populates="propertyListings")
     createdAt = Column(TIMESTAMP(timezone=True),
                        nullable=False, server_default=text('now()'))
@@ -90,8 +88,6 @@ class DiasporaPropertyListing(Base):
     numberOfKitchens = Column(Integer, default=0)
     agentId = Column(Integer, ForeignKey(
         "agents.id", ondelete="CASCADE"), nullable=False)
-    agentName = Column(String, ForeignKey(
-        "agents.name", ondelete="CASCADE"), nullable=False)
     agent = relationship("Agent", back_populates="diasporaPropertyListings")
     createdAt = Column(TIMESTAMP(timezone=True),
                        nullable=False, server_default=text('now()'))
