@@ -22,10 +22,8 @@ async def create_consultation_request(consultation_request: ConsultationBase, db
                           phoneNumber=consultation_request.phoneNumber, password=consultation_request.phoneNumber)
     user = create_user_without_password(new_user, db)
 
-    new_request = Consultation(userId=user.id, name=user.name,
-                               location='',
-                               phoneNumber=user.phoneNumber,
-                               email=user.email,
+    new_request = Consultation(userId=user.id,
+                               service=consultation_request.service,
                                message=consultation_request.message,
                                contactMethod=consultation_request.contactMethod
                                )

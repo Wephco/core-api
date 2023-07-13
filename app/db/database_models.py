@@ -214,10 +214,7 @@ class Consultation(Base):
     __tablename__ = "consultations"
 
     id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String, nullable=False)
-    location = Column(String, nullable=False)
-    phoneNumber = Column(String, nullable=False)
-    email = Column(String, nullable=False)
+    service = Column(String, nullable=False)
     message = Column(String, nullable=False)
     contactMethod = Column(String, nullable=False)
     userId = Column(Integer, ForeignKey(

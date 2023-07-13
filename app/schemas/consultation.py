@@ -5,9 +5,9 @@ from datetime import datetime
 
 class ConsultationBase(BaseModel):
     name: str
-    location: str
     phoneNumber: str
     email: EmailStr
+    service: str
     message: str
     contactMethod: str
 
