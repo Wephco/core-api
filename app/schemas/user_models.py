@@ -7,6 +7,7 @@ class UserBase(BaseModel):
     name: str
     email: EmailStr
     phoneNumber: str
+    title: Optional[str] = ''
 
     class Config:
         orm_mode = True

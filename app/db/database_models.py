@@ -12,6 +12,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, nullable=False)
+    title = Column(String, nullable=True)
     name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
@@ -43,10 +44,8 @@ class PropertyRequest(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     location = Column(String, nullable=False)
     propertyType = Column(String, nullable=False)
-    numberOfrooms = Column(Integer)
-    budgetRange = Column(String, nullable=False)
-    maxBudget = Column(String, nullable=False)
-    notes = Column(String)
+    requestType = Column(String, nullable=False)
+    budget = Column(String, nullable=False)
     isPaid = Column(Boolean, nullable=False)
     createdAt = Column(TIMESTAMP(timezone=True),
                        nullable=False, server_default=text('now()'))
@@ -62,6 +61,7 @@ class PropertyListing(Base):
     location = Column(String, nullable=False)
     propertyType = Column(String, nullable=False, default=PropertyTypes.house)
     propertyImages = Column(ARRAY(String), nullable=False)
+    description = Column(String, nullable=True)
     numberOfrooms = Column(Integer, default=0)
     numberOfToilets = Column(Integer, default=0)
     numberOfBathrooms = Column(Integer, default=0)
@@ -81,6 +81,7 @@ class DiasporaPropertyListing(Base):
     location = Column(String, nullable=False)
     propertyType = Column(String, nullable=False, default=PropertyTypes.house)
     propertyImages = Column(ARRAY(String), nullable=False)
+    description = Column(String, nullable=True)
     numberOfrooms = Column(Integer, default=0)
     numberOfToilets = Column(Integer, default=0)
     numberOfBathrooms = Column(Integer, default=0)

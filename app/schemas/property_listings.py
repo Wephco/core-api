@@ -7,6 +7,7 @@ class PropertyListingBase(BaseModel):
     location: str
     propertyType: str
     propertyImages: List[str]
+    description: Optional[str] = ''
     numberOfrooms: int
     numberOfToilets: int
     numberOfBathrooms: int

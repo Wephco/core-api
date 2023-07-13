@@ -10,31 +10,30 @@ class PropertyRequestBase(BaseModel):
     phoneNumber: str
     location: str
     propertyType: str
-    numberOfrooms: int
-    budgetRange: str
-    maxBudget: str
-    notes: Optional[str] = None
+    requestType: str
+    budget: str
+    isPaid: Optional[bool] = False
 
 
 class UpdatePropertyRequest(BaseModel):
+    id: int
     userId: int
     location: str
     propertyType: str
-    numberOfrooms: int
-    budgetRange: str
-    maxBudget: str
+    requestType: str
+    budget: str
     isPaid: bool
-    notes: str
+
+    class Config:
+        orm_mode = True
 
 
 class CreatePropertyRequestResponse(BaseModel):
     id: int
     location: str
     propertyType: str
-    numberOfrooms: int
-    budgetRange: str
-    maxBudget: str
-    notes: str
+    requestType: str
+    budget: str
     isPaid: bool
     createdAt: datetime
     userId: int
