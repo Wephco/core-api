@@ -24,7 +24,8 @@ async def create_property_request(property_request: PropertyRequestBase, db: Ses
     user = create_user_without_password(new_user, db)
 
     new_request = PropertyRequest(userId=user.id, location=property_request.location, propertyType=property_request.propertyType,
-                                  requestType=property_request.requestType, budget=property_request.budget, isPaid=False)
+                                  requestType=property_request.requestType, preferredService=property_request.preferredService, budget=property_request.budget, isPaid=False)
+
     db.add(new_request)
     db.commit()
     db.refresh(new_request)

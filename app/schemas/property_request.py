@@ -12,6 +12,7 @@ class PropertyRequestBase(BaseModel):
     propertyType: str
     requestType: str
     budget: str
+    preferredService: str
     isPaid: Optional[bool] = False
 
 
@@ -34,6 +35,7 @@ class CreatePropertyRequestResponse(BaseModel):
     propertyType: str
     requestType: str
     budget: str
+    preferredService: str
     isPaid: bool
     createdAt: datetime
     userId: int
