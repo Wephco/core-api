@@ -20,6 +20,7 @@ async def create_consultation_request(consultation_request: ConsultationBase, db
 
     new_user = CreateUser(name=consultation_request.name, email=consultation_request.email,
                           phoneNumber=consultation_request.phoneNumber, password=consultation_request.phoneNumber)
+    
     user = create_user_without_password(new_user, db)
 
     new_request = Consultation(userId=user.id,

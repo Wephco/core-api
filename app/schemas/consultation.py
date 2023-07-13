@@ -18,7 +18,6 @@ class ConsultationBase(BaseModel):
 class ConsultationResponse(ConsultationBase):
     id: int
     userId: int
-    user: UserBase
     createdAt: datetime
 
     class Config:
