@@ -46,7 +46,7 @@ class PropertyRequest(Base):
     propertyType = Column(String, nullable=False)
     requestType = Column(String, nullable=False)
     budget = Column(String, nullable=False)
-    preferredService = Column(String, nullable=False)
+    preferredService = Column(String, nullable=True)
     isPaid = Column(Boolean, nullable=False)
     createdAt = Column(TIMESTAMP(timezone=True),
                        nullable=False, server_default=text('now()'))

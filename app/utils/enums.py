@@ -45,5 +45,5 @@ class PropertyTypes(str, Enum):
 
 class AuthorizationCodes(str, Enum):
     wephco_admin = "wephco_admin"
-    wephco_ceo = "wephco_ceo"
+    wephco_ceo = "OZIOMA2022"
     super_admin = "neto"

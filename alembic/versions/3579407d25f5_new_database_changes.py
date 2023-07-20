@@ -1,8 +1,8 @@
-"""new database changes
+"""new_database_changes
 
-Revision ID: c37ef1c87d09
+Revision ID: 3579407d25f5
 Revises: 3f6be6fc58a9
-Create Date: 2023-07-13 18:51:08.187285
+Create Date: 2023-07-20 19:36:30.750403
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c37ef1c87d09'
+revision = '3579407d25f5'
 down_revision = '3f6be6fc58a9'
 branch_labels = None
 depends_on = None
@@ -21,7 +21,7 @@ def upgrade() -> None:
     op.alter_column('consultations', 'service',
                existing_type=sa.VARCHAR(),
                nullable=False)
-    op.add_column('propertyRequests', sa.Column('preferredService', sa.String(), nullable=False))
+    op.add_column('propertyRequests', sa.Column('preferredService', sa.String(), nullable=True))
     # ### end Alembic commands ###
 
 
